@@ -5,9 +5,8 @@
  * Lin.k N.V. proprietary/confidential. Use is subject to license terms.
  */
 
-package ch.qos.logback.core.rolling.shutdown.servlet;
+package ch.qos.logback.core.rolling.shutdown;
 
-import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
 import com.google.common.collect.Lists;
 
 import javax.servlet.ServletContextEvent;

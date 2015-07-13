@@ -1,8 +1,10 @@
 package ch.qos.logback.core.rolling;
 
 
+import ch.qos.logback.core.rolling.shutdown.RollingPolicyContextListener;
+import ch.qos.logback.core.rolling.shutdown.RollingPolicyJVMListener;
 import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
-import ch.qos.logback.core.rolling.shutdown.servlet.RollingPolicyContextListener;
+import ch.qos.logback.core.rolling.shutdown.ShutdownHookType;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -21,6 +23,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
     private String s3BucketName;
     private String s3FolderName;
     private boolean rolloverOnExit;
+    private ShutdownHookType shutdownHookType;
 
     private ExecutorService executor;
     private AmazonS3Client s3Client;
@@ -31,6 +34,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
 
         executor = Executors.newFixedThreadPool( 1 );
         rolloverOnExit = true;
+        shutdownHookType = ShutdownHookType.NONE;
     }
 
     protected AmazonS3Client getS3Client() {
@@ -49,8 +53,25 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
 
         super.start();
 
-        //Register so the log gets uploaded on shutdown
-        RollingPolicyContextListener.registerShutdownListener( this );
+        //Register shutdown hook so the log gets uploaded on shutdown, if needed
+        switch( shutdownHookType ) {
+
+            case SERVLET_CONTEXT:
+
+                RollingPolicyContextListener.registerShutdownListener( this );
+                break;
+
+            case JVM_SHUTDOWN_HOOK:
+
+                Runtime.getRuntime().addShutdownHook( new Thread( new RollingPolicyJVMListener( this ) ) );
+                break;
+
+            case NONE:
+            default:
+
+                //Do nothing
+                break;
+        }
     }
 
     @Override
@@ -180,5 +201,15 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
     public void setRolloverOnExit( boolean rolloverOnExit ) {
 
         this.rolloverOnExit = rolloverOnExit;
+    }
+
+    public ShutdownHookType getShutdownHookType() {
+
+        return shutdownHookType;
+    }
+
+    public void setShutdownHookType( ShutdownHookType shutdownHookType ) {
+
+        this.shutdownHookType = shutdownHookType;
     }
 }
