@@ -4,7 +4,7 @@ Logback RollingPolicy with S3 upload
 logback-s3 is a Logback RollingPolicy that automaitcally uploads rolled log files to S3.
 As S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy, it works exactly same as FixedWindowRollingPolicy apart from uploading log files to S3.
 
-logback-s3 is implemented based on Logpic (https://github.com/mweagle/Logpig) but simplified for my needs.
+logback-s3 is implemented based on Logpic (https://github.com/mweagle/Logpig).
 
 Example logback.xml
 ----------
@@ -30,7 +30,8 @@ An example logback.xml that uses `S3FixedWindowRollingPolicy` with `RollingFileA
     <s3BucketName>com.mybucket</s3BucketName>
     <s3FolderName>log</s3FolderName>
 
-    <rollingOnExit>true</rollingOnExit>
+    <rolloverOnExit>true</rolloverOnExit>
+    <shutdownHookType>SERVLET_CONTEXT</shutdownHookType>
   </rollingPolicy>
 
   <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
