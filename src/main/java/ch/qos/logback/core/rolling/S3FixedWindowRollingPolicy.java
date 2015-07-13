@@ -6,25 +6,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
+import ch.qos.logback.core.rolling.shutdown.servlet.RollingPolicyContextListener;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 
-/**
- * Extension of FixedWindowRollingPolicy.
- *
- * On each rolling event (which is defined by <triggeringPolicy>), this policy does:
- * 1. Regular log file rolling as FixedWindowsRollingPolicy does
- * 2. Upload the rolled log file to S3 bucket
- *
- * Also, this policy uploads the active log file on JVM exit. If rollingOnExit is true,
- * another log rolling happens and a rolled log is uploaded. If rollingOnExit is false,
- * the active file is directly uploaded.
- *
- * If rollingOnExit is false and if no rolling happened before JVM exits, this rolling
- * policy uploads the active log file as it is.
- */
-public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy {
+public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy implements RollingPolicyShutdownListener {
 
     ExecutorService executor = Executors.newFixedThreadPool(1);
 
@@ -33,7 +21,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy {
     String s3BucketName;
     String s3FolderName;
 
-    boolean rollingOnExit = true;
+    private boolean rolloverOnExit = true;
 
     AmazonS3Client s3Client;
 
@@ -48,8 +36,9 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy {
     @Override
     public void start() {
         super.start();
-        // add a hook on JVM shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(new ShutdownHookRunnable()));
+
+        //Register so the log gets uploaded on shutdown
+        RollingPolicyContextListener.registerShutdownListener( this );
     }
 
     @Override
@@ -90,30 +79,34 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy {
         executor.execute(uploader);
     }
 
-    // On JVM exit, upload the current log
-    class ShutdownHookRunnable implements Runnable {
+    /**
+     * Shutdown hook that gets called when exiting the application.
+     */
+    @Override
+    public void doShutdown() {
 
-        @Override
-        public void run() {
-            try {
-                if (isRollingOnExit())
-                    // do rolling and upload the rolled file on exit
-                    rollover();
-                else
-                    // upload the active log file without rolling
-                    uploadFileToS3Async(getActiveFileName());
+        try {
 
-                // wait until finishing the upload
-                executor.shutdown();
-                executor.awaitTermination(10, TimeUnit.MINUTES);
-            } catch (Exception ex) {
-                addError("Failed to upload a log in S3", ex);
-                executor.shutdownNow();
+            if( isRolloverOnExit() ) {
+
+                //Do rolling and upload the rolled file on exit
+                rollover();
             }
+            else {
+
+                //Upload the active log file without rolling
+                uploadFileToS3Async( getActiveFileName() );
+            }
+
+            //Wait until finishing the upload
+            executor.shutdown();
+            executor.awaitTermination( 10, TimeUnit.MINUTES );
         }
+        catch( Exception ex ) {
 
+            executor.shutdownNow();
+        }
     }
-
 
     public String getAwsAccessKey() {
         return awsAccessKey;
@@ -147,12 +140,13 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy {
         this.s3FolderName = s3FolderName;
     }
 
-    public boolean isRollingOnExit() {
-        return rollingOnExit;
+    public boolean isRolloverOnExit() {
+
+        return rolloverOnExit;
     }
 
-    public void setRollingOnExit(boolean rollingOnExit) {
-        this.rollingOnExit = rollingOnExit;
-    }
+    public void setRolloverOnExit( boolean rolloverOnExit ) {
 
+        this.rolloverOnExit = rolloverOnExit;
+    }
 }
