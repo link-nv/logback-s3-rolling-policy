@@ -1,7 +1,7 @@
 Logback RollingPolicy with S3 upload
 ====================================
 
-logback-s3-rolling-policy automatically uploads rolled log files to S3.
+logback-s3-rolling-policy automatically uploads rolled log files to S3. Each uploaded file will be prefixed by a timestamp formatted as `yyyyMMdd_HHmmss`.
 
 There are 2 rolling policies which can be used:
 * `S3FixedWindowRollingPolicy`
@@ -64,6 +64,7 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
   </triggeringPolicy>
 </appender>
 ```
+An uploaded
 
 * `ch.qos.logback.core.rolling.S3TimeBasedRollingPolicy`:  
 ```xml
