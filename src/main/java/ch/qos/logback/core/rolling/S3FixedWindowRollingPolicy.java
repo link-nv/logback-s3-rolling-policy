@@ -1,10 +1,9 @@
 package ch.qos.logback.core.rolling;
 
 import ch.qos.logback.core.rolling.aws.AmazonS3ClientImpl;
-import ch.qos.logback.core.rolling.shutdown.RollingPolicyContextListener;
-import ch.qos.logback.core.rolling.shutdown.RollingPolicyJVMListener;
 import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
 import ch.qos.logback.core.rolling.shutdown.ShutdownHookType;
+import ch.qos.logback.core.rolling.shutdown.ShutdownHookUtil;
 
 public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy implements RollingPolicyShutdownListener {
 
@@ -34,24 +33,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
         s3Client = new AmazonS3ClientImpl( getAwsAccessKey(), getAwsSecretKey(), getS3BucketName(), getS3FolderName() );
 
         //Register shutdown hook so the log gets uploaded on shutdown, if needed
-        switch( shutdownHookType ) {
-
-            case SERVLET_CONTEXT:
-
-                RollingPolicyContextListener.registerShutdownListener( this );
-                break;
-
-            case JVM_SHUTDOWN_HOOK:
-
-                Runtime.getRuntime().addShutdownHook( new Thread( new RollingPolicyJVMListener( this ) ) );
-                break;
-
-            case NONE:
-            default:
-
-                //Do nothing
-                break;
-        }
+        ShutdownHookUtil.registerShutdownHook( this, getShutdownHookType() );
     }
 
     @Override
