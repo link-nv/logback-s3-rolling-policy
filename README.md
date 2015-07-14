@@ -98,7 +98,7 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
 <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
   <file>logs/myapp.log</file>
   <encoder>
-  <pattern>[%d] %-8relative %22c{0} [%-5level] %msg%xEx{3}%n</pattern>
+    <pattern>[%d] %-8relative %22c{0} [%-5level] %msg%xEx{3}%n</pattern>
   </encoder>
   <rollingPolicy class="ch.qos.logback.core.rolling.S3FixedWindowRollingPolicy">
     <fileNamePattern>logs/myapp.%i.log.gz</fileNamePattern>
