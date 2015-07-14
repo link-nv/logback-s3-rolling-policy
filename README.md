@@ -95,7 +95,7 @@ It is a good idea to create an IAM user only allowed to upload S3 object to a sp
 It improves the control and reduces the risk of unauthorized access to your S3 bucket.
 
 The following is an example IAM policy.
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
