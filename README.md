@@ -64,7 +64,6 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
   </triggeringPolicy>
 </appender>
 ```
-An uploaded
 
 * `ch.qos.logback.core.rolling.S3TimeBasedRollingPolicy`:  
 ```xml
