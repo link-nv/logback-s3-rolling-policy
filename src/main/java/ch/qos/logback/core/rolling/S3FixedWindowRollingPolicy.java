@@ -20,7 +20,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
 
         super();
 
-        rolloverOnExit = true;
+        rolloverOnExit = false;
         shutdownHookType = ShutdownHookType.NONE;
     }
 
