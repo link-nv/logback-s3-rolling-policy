@@ -74,7 +74,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
         else {
 
             //Upload the active log file without rolling
-            s3Client.uploadFileToS3Async( getActiveFileName() );
+            s3Client.uploadFileToS3Async( getActiveFileName(), true );
         }
 
         //Wait until finishing the upload

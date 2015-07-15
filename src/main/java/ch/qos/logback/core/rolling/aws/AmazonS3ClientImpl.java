@@ -55,6 +55,11 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
     public void uploadFileToS3Async( final String filename ) {
 
+        uploadFileToS3Async( filename, false );
+    }
+
+    public void uploadFileToS3Async( final String filename, final boolean overrideTimestampSetting ) {
+
         if( amazonS3Client == null ) {
 
             amazonS3Client = new AmazonS3Client( new BasicAWSCredentials( getAwsAccessKey(), getAwsSecretKey() ) );
@@ -76,7 +81,7 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         }
 
         //Add timestamp prefix if desired
-        if( prefixTimestamp ) {
+        if( prefixTimestamp || overrideTimestampSetting ) {
 
             s3ObjectName.append( new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() ) ).append( "_" );
         }

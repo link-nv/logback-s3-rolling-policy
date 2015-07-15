@@ -68,17 +68,25 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
     public void rollover()
             throws RolloverFailure {
 
-        final String elapsedPeriodsFileName =
-                String.format(
-                        "%s%s",
-                        timeBasedFileNamingAndTriggeringPolicy.getElapsedPeriodsFileName(),
-                        getFileNameSuffix() );
+        if( timeBasedFileNamingAndTriggeringPolicy.getElapsedPeriodsFileName() != null ) {
 
-        super.rollover();
+            final String elapsedPeriodsFileName =
+                    String.format(
+                            "%s%s",
+                            timeBasedFileNamingAndTriggeringPolicy.getElapsedPeriodsFileName(),
+                            getFileNameSuffix() );
 
-        //Queue upload the current log file into S3
-        //Because we need to wait for the file to be rolled over, use a thread so this doesn't block.
-        executor.execute( new UploadQueuer( elapsedPeriodsFileName ) );
+            super.rollover();
+
+            //Queue upload the current log file into S3
+            //Because we need to wait for the file to be rolled over, use a thread so this doesn't block.
+            executor.execute( new UploadQueuer( elapsedPeriodsFileName ) );
+        }
+        else {
+
+            //Upload the active log file without rolling
+            s3Client.uploadFileToS3Async( getActiveFileName(), true );
+        }
     }
 
     /**
@@ -95,7 +103,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         else {
 
             //Upload the active log file without rolling
-            s3Client.uploadFileToS3Async( getActiveFileName() );
+            s3Client.uploadFileToS3Async( getActiveFileName(), true );
         }
 
         //Shutdown executor
