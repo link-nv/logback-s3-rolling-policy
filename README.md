@@ -110,6 +110,8 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
     <s3FolderName>log</s3FolderName>
     <rolloverOnExit>true</rolloverOnExit>
     <shutdownHookType>SERVLET_CONTEXT</shutdownHookType>
+    <prefixTimestamp>true</prefixTimestamp>
+    <prefixIdentifier>true</prefixIdentifier>
   </rollingPolicy>
   <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
     <maxFileSize>10MB</maxFileSize>
@@ -133,6 +135,8 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
     <s3FolderName>log</s3FolderName>
     <rolloverOnExit>true</rolloverOnExit>
     <shutdownHookType>SERVLET_CONTEXT</shutdownHookType>
+    <prefixTimestamp>false</prefixTimestamp>
+    <prefixIdentifier>true</prefixIdentifier>
     <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
       <maxFileSize>10MB</maxFileSize>
     </timeBasedFileNamingAndTriggeringPolicy>
