@@ -1,6 +1,7 @@
 package ch.qos.logback.core.rolling.aws;
 
 import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
+import ch.qos.logback.core.rolling.util.IdentifierUtil;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 
@@ -23,21 +24,33 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
     private final String s3BucketName;
     private final String s3FolderName;
 
+    private final boolean prefixTimestamp;
+    private final boolean prefixIdentifier;
+
+    private final String identifier;
+
     private AmazonS3Client amazonS3Client;
     private ExecutorService executor;
 
     public AmazonS3ClientImpl( String awsAccessKey,
                                String awsSecretKey,
                                String s3BucketName,
-                               String s3FolderName ) {
+                               String s3FolderName,
+                               boolean prefixTimestamp,
+                               boolean prefixIdentifier ) {
 
         this.awsAccessKey = awsAccessKey;
         this.awsSecretKey = awsSecretKey;
         this.s3BucketName = s3BucketName;
         this.s3FolderName = s3FolderName;
 
+        this.prefixTimestamp = prefixTimestamp;
+        this.prefixIdentifier = prefixIdentifier;
+
         executor = Executors.newFixedThreadPool( 1 );
         amazonS3Client = null;
+
+        identifier = prefixIdentifier ? IdentifierUtil.getIdentifier() : null;
     }
 
     public void uploadFileToS3Async( final String filename ) {
@@ -62,7 +75,18 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
             s3ObjectName.append( getS3FolderName() ).append( "/" );
         }
 
-        s3ObjectName.append( new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() ) ).append( "_" );
+        //Add timestamp prefix if desired
+        if( prefixTimestamp ) {
+
+            s3ObjectName.append( new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() ) ).append( "_" );
+        }
+
+        //Add identifier prefix if desired
+        if( prefixIdentifier ) {
+
+            s3ObjectName.append( identifier ).append( "_" );
+        }
+
         s3ObjectName.append( file.getName() );
 
         //Queue thread to upload
@@ -121,5 +145,20 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
     public String getS3FolderName() {
 
         return s3FolderName;
+    }
+
+    public boolean isPrefixTimestamp() {
+
+        return prefixTimestamp;
+    }
+
+    public boolean isPrefixIdentifier() {
+
+        return prefixIdentifier;
+    }
+
+    public String getIdentifier() {
+
+        return identifier;
     }
 }

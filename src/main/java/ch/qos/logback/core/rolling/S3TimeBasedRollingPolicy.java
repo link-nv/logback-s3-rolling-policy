@@ -22,8 +22,10 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
     private String awsSecretKey;
     private String s3BucketName;
     private String s3FolderName;
-    private boolean rolloverOnExit;
     private ShutdownHookType shutdownHookType;
+    private boolean rolloverOnExit;
+    private boolean prefixTimestamp;
+    private boolean prefixIdentifier;
 
     private AmazonS3ClientImpl s3Client;
     private ExecutorService executor;
@@ -34,6 +36,8 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
         rolloverOnExit = false;
         shutdownHookType = ShutdownHookType.NONE;
+        prefixTimestamp = false;
+        prefixIdentifier = false;
 
         executor = Executors.newFixedThreadPool( 1 );
     }
@@ -44,7 +48,17 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         super.start();
 
         //Init S3 client
-        s3Client = new AmazonS3ClientImpl( getAwsAccessKey(), getAwsSecretKey(), getS3BucketName(), getS3FolderName() );
+        s3Client =
+                new AmazonS3ClientImpl(
+                        getAwsAccessKey(),
+                        getAwsSecretKey(),
+                        getS3BucketName(),
+                        getS3FolderName(),
+                        isPrefixTimestamp(),
+                        isPrefixIdentifier() );
+
+        if( isPrefixIdentifier() )
+            addInfo( "Using identifier prefix \"" + s3Client.getIdentifier() + "\"" );
 
         //Register shutdown hook so the log gets uploaded on shutdown, if needed
         ShutdownHookUtil.registerShutdownHook( this, getShutdownHookType() );
@@ -219,5 +233,25 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
     public void setShutdownHookType( ShutdownHookType shutdownHookType ) {
 
         this.shutdownHookType = shutdownHookType;
+    }
+
+    public boolean isPrefixTimestamp() {
+
+        return prefixTimestamp;
+    }
+
+    public void setPrefixTimestamp( boolean prefixTimestamp ) {
+
+        this.prefixTimestamp = prefixTimestamp;
+    }
+
+    public boolean isPrefixIdentifier() {
+
+        return prefixIdentifier;
+    }
+
+    public void setPrefixIdentifier( boolean prefixIdentifier ) {
+
+        this.prefixIdentifier = prefixIdentifier;
     }
 }
