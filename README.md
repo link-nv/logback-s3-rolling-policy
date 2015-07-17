@@ -9,6 +9,18 @@ There are 2 rolling policies which can be used:
 
 logback-s3-rolling-policy was forked from logback-s3 (https://github.com/shuwada/logback-s3) but transfered into a new project because changes were getting too big.
 
+Index
+-----
+
+* [Requirements](#requirements) 
+* [Usage](#usage) 
+* [Configuration](#configuration) 
+  * [logback.xml variables](#logbackxml-variables) 
+  * [web.xml](#webxml) 
+  * [logback.xml rolling policy examples](#logbackxml-rolling-policy-examples) 
+* [AWS Credentials](#aws-credentials) 
+* [Libraries](#libraries) 
+
 Requirements
 ------------
 
@@ -73,7 +85,7 @@ Whether you implement one of any available S3 policies, the following extra vari
 There are few optional variables:
 
 * `s3FolderName` The S3 folder name in your S3 bucket to put the log files in.
-* `shutdownHookType` Defines which type of shutdown hook you want to use. This variable is mandatory when you user `rolloverOnExit`. Defaults to `NONE`. Possible values are:
+* `shutdownHookType` Defines which type of shutdown hook you want to use. This variable is mandatory when you use `rolloverOnExit`. Defaults to `NONE`. Possible values are:
   * `NONE` This will not add a shutdown hook. Please note that your most up to date log file won't be uploaded to S3!
   * `JVM_SHUTDOWN_HOOK` This will add a runtime shutdown hook. If you're using a webapplication, please use the `SERVLET_CONTEXT`, as the JVM shutdown hook is not really safe to use here.
   * `SERVLET_CONTEXT` This will register a shutdown hook to the context destroyed method of `RollingPolicyContextListener`. Don't forget to actually add the context listener to you `web.xml`. (see below)
