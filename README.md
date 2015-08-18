@@ -67,7 +67,7 @@ Add the `logback-s3-rolling-policy` dependency to your pom file:
 <dependency>
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-s3-rolling-policy</artifactId>
-    <version>0.3</version>
+    <version>1.0</version>
 </dependency>
 ```
 
@@ -84,7 +84,7 @@ Whether you implement one of any available S3 policies, the following extra vari
 
 There are few optional variables:
 
-* `s3FolderName` The S3 folder name in your S3 bucket to put the log files in.
+* `s3FolderName` The S3 folder name in your S3 bucket to put the log files in. This variable supports dates, just put your [pattern](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html) between `%d{}`. Example: `%d{yyyy/MM/dd}`.
 * `shutdownHookType` Defines which type of shutdown hook you want to use. This variable is mandatory when you use `rolloverOnExit`. Defaults to `NONE`. Possible values are:
   * `NONE` This will not add a shutdown hook. Please note that your most up to date log file won't be uploaded to S3!
   * `JVM_SHUTDOWN_HOOK` This will add a runtime shutdown hook. If you're using a webapplication, please use the `SERVLET_CONTEXT`, as the JVM shutdown hook is not really safe to use here.
@@ -119,7 +119,7 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
     <awsAccessKey>ACCESS_KEY</awsAccessKey>
     <awsSecretKey>SECRET_KEY</awsSecretKey>
     <s3BucketName>myapp-logging</s3BucketName>
-    <s3FolderName>log</s3FolderName>
+    <s3FolderName>logs/%d{yyyy/MM/dd}</s3FolderName>
     <rolloverOnExit>true</rolloverOnExit>
     <shutdownHookType>SERVLET_CONTEXT</shutdownHookType>
     <prefixTimestamp>true</prefixTimestamp>
@@ -130,6 +130,7 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
   </triggeringPolicy>
 </appender>
 ```
+In this example you'll find the logs at `myapp-logging/logs/2015/08/18/`.
 
 * `ch.qos.logback.core.rolling.S3TimeBasedRollingPolicy`:  
 ```xml
@@ -155,6 +156,7 @@ An example `logback.xml` appender for each available policy using `RollingFileAp
   </rollingPolicy>
 </appender>
 ```
+In this example you'll find the logs at `myapp-logging/log/`.
 
 ### AWS Credentials
 

@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User: gvhoecke <gianni.vanhoecke@lin-k.net>
@@ -77,7 +79,7 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         final StringBuffer s3ObjectName = new StringBuffer();
         if( getS3FolderName() != null ) {
 
-            s3ObjectName.append( getS3FolderName() ).append( "/" );
+            s3ObjectName.append( format( getS3FolderName() ) ).append( "/" );
         }
 
         //Add timestamp prefix if desired
@@ -130,6 +132,24 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
             executor.shutdownNow();
         }
+    }
+
+    private String format( String s ) {
+
+        Pattern pattern = Pattern.compile( "%d\\{(.*?)\\}" );
+        Matcher matcher = pattern.matcher( s );
+
+        while( matcher.find() ) {
+
+            String match = matcher.group( 1 );
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat( match );
+            String replace = simpleDateFormat.format( new Date() );
+
+            s = s.replace( String.format( "%%d{%s}", match ), replace );
+        }
+
+        return s;
     }
 
     public String getAwsAccessKey() {
