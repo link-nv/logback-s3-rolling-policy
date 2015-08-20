@@ -55,12 +55,12 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         identifier = prefixIdentifier ? IdentifierUtil.getIdentifier() : null;
     }
 
-    public void uploadFileToS3Async( final String filename ) {
+    public void uploadFileToS3Async( final String filename, final Date date ) {
 
-        uploadFileToS3Async( filename, false );
+        uploadFileToS3Async( filename, date, false );
     }
 
-    public void uploadFileToS3Async( final String filename, final boolean overrideTimestampSetting ) {
+    public void uploadFileToS3Async( final String filename, final Date date, final boolean overrideTimestampSetting ) {
 
         if( amazonS3Client == null ) {
 
@@ -79,13 +79,13 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         final StringBuffer s3ObjectName = new StringBuffer();
         if( getS3FolderName() != null ) {
 
-            s3ObjectName.append( format( getS3FolderName() ) ).append( "/" );
+            s3ObjectName.append( format( getS3FolderName(), date ) ).append( "/" );
         }
 
         //Add timestamp prefix if desired
         if( prefixTimestamp || overrideTimestampSetting ) {
 
-            s3ObjectName.append( new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() ) ).append( "_" );
+            s3ObjectName.append( new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( date ) ).append( "_" );
         }
 
         //Add identifier prefix if desired
@@ -134,7 +134,7 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         }
     }
 
-    private String format( String s ) {
+    private String format( String s, Date date ) {
 
         Pattern pattern = Pattern.compile( "%d\\{(.*?)\\}" );
         Matcher matcher = pattern.matcher( s );
@@ -144,7 +144,7 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
             String match = matcher.group( 1 );
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat( match );
-            String replace = simpleDateFormat.format( new Date() );
+            String replace = simpleDateFormat.format( date );
 
             s = s.replace( String.format( "%%d{%s}", match ), replace );
         }

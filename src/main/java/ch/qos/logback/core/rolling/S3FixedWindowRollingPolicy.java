@@ -5,6 +5,8 @@ import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
 import ch.qos.logback.core.rolling.shutdown.ShutdownHookType;
 import ch.qos.logback.core.rolling.shutdown.ShutdownHookUtil;
 
+import java.util.Date;
+
 public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy implements RollingPolicyShutdownListener {
 
     private String awsAccessKey;
@@ -57,7 +59,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
         super.rollover();
 
         //Upload the current log file into S3
-        s3Client.uploadFileToS3Async( fileNamePattern.convertInt( getMinIndex() ) );
+        s3Client.uploadFileToS3Async( fileNamePattern.convertInt( getMinIndex() ), new Date() );
     }
 
     /**
@@ -74,7 +76,7 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
         else {
 
             //Upload the active log file without rolling
-            s3Client.uploadFileToS3Async( getActiveFileName(), true );
+            s3Client.uploadFileToS3Async( getActiveFileName(), new Date(), true );
         }
 
         //Wait until finishing the upload
