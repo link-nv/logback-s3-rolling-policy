@@ -2,6 +2,7 @@ package ch.qos.logback.core.rolling.aws;
 
 import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
 import ch.qos.logback.core.rolling.util.IdentifierUtil;
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 
@@ -64,7 +65,13 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
         if( amazonS3Client == null ) {
 
-            amazonS3Client = new AmazonS3Client( new BasicAWSCredentials( getAwsAccessKey(), getAwsSecretKey() ) );
+            // If the access and secret key is not specified then try to use other providers
+            if (getAwsAccessKey() == null || getAwsAccessKey().trim().isEmpty()) {
+                amazonS3Client = new AmazonS3Client();
+            } else {
+                AWSCredentials cred = new BasicAWSCredentials(getAwsAccessKey(), getAwsSecretKey());
+                amazonS3Client = new AmazonS3Client(cred);
+            }
         }
 
         final File file = new File( filename );
