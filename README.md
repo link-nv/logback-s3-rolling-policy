@@ -67,7 +67,7 @@ Add the `logback-s3-rolling-policy` dependency to your pom file:
 <dependency>
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-s3-rolling-policy</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 </dependency>
 ```
 
