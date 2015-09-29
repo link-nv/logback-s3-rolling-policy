@@ -66,11 +66,11 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         if( amazonS3Client == null ) {
 
             // If the access and secret key is not specified then try to use other providers
-            if (getAwsAccessKey() == null || getAwsAccessKey().trim().isEmpty()) {
+            if( getAwsAccessKey() == null || getAwsAccessKey().trim().isEmpty() ) {
                 amazonS3Client = new AmazonS3Client();
             } else {
-                AWSCredentials cred = new BasicAWSCredentials(getAwsAccessKey(), getAwsSecretKey());
-                amazonS3Client = new AmazonS3Client(cred);
+                AWSCredentials cred = new BasicAWSCredentials( getAwsAccessKey(), getAwsSecretKey() );
+                amazonS3Client = new AmazonS3Client( cred );
             }
         }
 
@@ -112,8 +112,7 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
                 try {
 
                     amazonS3Client.putObject( getS3BucketName(), s3ObjectName.toString(), file );
-                }
-                catch( Exception ex ) {
+                } catch( Exception ex ) {
 
                     ex.printStackTrace();
                 }
@@ -134,8 +133,7 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
             //Wait until finishing the upload
             executor.shutdown();
             executor.awaitTermination( 10, TimeUnit.MINUTES );
-        }
-        catch( InterruptedException e ) {
+        } catch( InterruptedException e ) {
 
             executor.shutdownNow();
         }

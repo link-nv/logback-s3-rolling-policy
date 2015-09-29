@@ -89,8 +89,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
             //Queue upload the current log file into S3
             //Because we need to wait for the file to be rolled over, use a thread so this doesn't block.
             executor.execute( new UploadQueuer( elapsedPeriodsFileName, lastPeriod ) );
-        }
-        else {
+        } else {
 
             //Upload the active log file without rolling
             s3Client.uploadFileToS3Async( getActiveFileName(), lastPeriod, true );
@@ -123,8 +122,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
             //Do rolling and upload the rolled file on exit
             rollover();
-        }
-        else {
+        } else {
 
             //Upload the active log file without rolling
             s3Client.uploadFileToS3Async( getActiveFileName(), lastPeriod, true );
@@ -135,8 +133,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
             executor.shutdown();
             executor.awaitTermination( 10, TimeUnit.MINUTES );
-        }
-        catch( InterruptedException e ) {
+        } catch( InterruptedException e ) {
 
             executor.shutdownNow();
         }
@@ -151,13 +148,11 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
             try {
 
-                future.get( CoreConstants.SECONDS_TO_WAIT_FOR_COMPRESSION_JOBS, TimeUnit.SECONDS);
-            }
-            catch( TimeoutException e ) {
+                future.get( CoreConstants.SECONDS_TO_WAIT_FOR_COMPRESSION_JOBS, TimeUnit.SECONDS );
+            } catch( TimeoutException e ) {
 
                 addError( "Timeout while waiting for compression job to finish", e );
-            }
-            catch( Exception e ) {
+            } catch( Exception e ) {
 
                 addError( "Unexpected exception while waiting for compression job to finish", e );
             }
@@ -203,8 +198,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
                 waitForAsynchronousJobToStop();
                 s3Client.uploadFileToS3Async( elapsedPeriodsFileName, date );
-            }
-            catch( Exception ex ) {
+            } catch( Exception ex ) {
 
                 ex.printStackTrace();
             }

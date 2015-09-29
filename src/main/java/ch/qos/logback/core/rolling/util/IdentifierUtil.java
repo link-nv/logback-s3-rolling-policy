@@ -67,20 +67,19 @@ public class IdentifierUtil {
             encoding = encoding == null ? "UTF-8" : encoding;
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buf = new byte[8192];
+            byte[] buf = new byte[ 8192 ];
             int len = 0;
 
-            while( (len = in.read( buf ) ) != -1 ) {
+            while( ( len = in.read( buf ) ) != -1 ) {
 
-                baos.write(buf, 0, len);
+                baos.write( buf, 0, len );
             }
 
             String body = new String( baos.toByteArray(), encoding );
 
             if( body.trim().length() > 0 )
                 return body.trim();
-        }
-        catch( Exception e ) {
+        } catch( Exception e ) {
 
             return null;
         }
@@ -100,8 +99,7 @@ public class IdentifierUtil {
 
             if( hostname != null && hostname.length() > 0 )
                 return hostname;
-        }
-        catch( Exception e ) {
+        } catch( Exception e ) {
 
             return null;
         }
