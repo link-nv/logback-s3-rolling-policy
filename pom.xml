@@ -34,18 +34,12 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>${maven-surefire-report-plugin.version}</version>
-            </plugin>
         </plugins>
     </reporting>
 
     <properties>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <boot.classpath />
 
         <deploy.url>scpexe://buildserver/Users/devel/maven2/repository</deploy.url>
         <deploy.repository.url>scpexe://repo.linkid.be/home/maven/repository/releases</deploy.repository.url>
@@ -111,19 +105,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-
-        <!-- JDK profile -->
-        <profile>
-            <id>mac</id>
-            <activation>
-                <os>
-                    <family>mac</family>
-                </os>
-            </activation>
-            <properties>
-                <boot.classpath>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/Library//Java/JavaVirtualMachines/1.6.0_29-b11-402.jdk/Contents/Classes/classes.jar:/Library//Java/JavaVirtualMachines/1.6.0_29-b11-402.jdk/Contents/Classes/jsse.jar:/Library//Java/JavaVirtualMachines/1.6.0_29-b11-402.jdk/Contents/Classes/jce.jar</boot.classpath>
-            </properties>
         </profile>
 
         <!-- Profile to use the buildserver maven repository -->
@@ -207,12 +188,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
-                    <!-- fix for building with Java 7 -->
-                    <compilerArguments>
-                        <bootclasspath>${boot.classpath}</bootclasspath>
-                    </compilerArguments>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <meminitial>32m</meminitial>
                     <maxmem>128m</maxmem>
                     <encoding>UTF-8</encoding>
