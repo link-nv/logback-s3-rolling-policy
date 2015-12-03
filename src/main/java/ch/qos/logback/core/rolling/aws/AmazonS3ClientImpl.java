@@ -1,5 +1,6 @@
 package ch.qos.logback.core.rolling.aws;
 
+import ch.qos.logback.core.rolling.data.CustomData;
 import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
 import ch.qos.logback.core.rolling.util.IdentifierUtil;
 import com.amazonaws.auth.AWSCredentials;
@@ -87,6 +88,12 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         if( getS3FolderName() != null ) {
 
             s3ObjectName.append( format( getS3FolderName(), date ) ).append( "/" );
+        }
+
+        //Extra custom S3 (runtime) folder?
+        if( CustomData.extraS3Folder.get() != null ) {
+
+            s3ObjectName.append( CustomData.extraS3Folder.get() ).append( "/" );
         }
 
         //Add timestamp prefix if desired
