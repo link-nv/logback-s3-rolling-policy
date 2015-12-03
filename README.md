@@ -24,7 +24,7 @@ Index
 Requirements
 ------------
 
-* Java 1.6+
+* Java 1.7+
 
 Usage
 -----
