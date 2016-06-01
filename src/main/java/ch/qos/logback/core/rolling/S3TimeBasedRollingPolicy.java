@@ -98,7 +98,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
     public Date getLastPeriod() {
 
-        Date lastPeriod = ( (DefaultTimeBasedFileNamingAndTriggeringPolicy<E>) timeBasedFileNamingAndTriggeringPolicy )
+        Date lastPeriod = ( (TimeBasedFileNamingAndTriggeringPolicyBase<E>) timeBasedFileNamingAndTriggeringPolicy )
                 .dateInCurrentPeriod;
 
         if( getParentsRawFileProperty() != null ) {
