@@ -67,7 +67,7 @@ Add the `logback-s3-rolling-policy` dependency to your pom file:
 <dependency>
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-s3-rolling-policy</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
 </dependency>
 ```
 
@@ -192,7 +192,7 @@ Libraries
 ---------
 
 This project uses the following libraries:
-* `com.amazonaws:aws-java-sdk:1.8.6`
+* `com.amazonaws:aws-java-sdk:1.11.7`
 * `ch.qos.logback:logback-classic:1.1.3`
 * `com.google.guava:guava:18.0`
 * `javax.servlet:servlet-api:2.4` (scope provided)
