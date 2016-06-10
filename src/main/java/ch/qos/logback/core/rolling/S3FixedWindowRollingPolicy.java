@@ -23,6 +23,11 @@ import ch.qos.logback.core.rolling.shutdown.ShutdownHookUtil;
 import java.util.Date;
 
 
+/**
+ * User: gvhoecke <gianni.vanhoecke@lin-k.net>
+ * Date: 13/07/15
+ * Time: 16:53
+ */
 public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy implements RollingPolicyShutdownListener {
 
     private String           awsAccessKey;
@@ -55,8 +60,10 @@ public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy impleme
         s3Client = new AmazonS3ClientImpl( getAwsAccessKey(), getAwsSecretKey(), getS3BucketName(), getS3FolderName(), isPrefixTimestamp(),
                 isPrefixIdentifier() );
 
-        if (isPrefixIdentifier())
+        if (isPrefixIdentifier()) {
+
             addInfo( "Using identifier prefix \"" + s3Client.getIdentifier() + "\"" );
+        }
 
         //Register shutdown hook so the log gets uploaded on shutdown, if needed
         ShutdownHookUtil.registerShutdownHook( this, getShutdownHookType() );

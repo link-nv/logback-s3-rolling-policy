@@ -6,6 +6,26 @@
     <artifactId>logback-s3-rolling-policy</artifactId>
     <version>GIT-SNAPSHOT</version>
 
+    <!-- ORGANIZATION & DEVELOPERS -->
+    <organization>
+        <name>linkID Inc.</name>
+        <url>https://www.linkid.be</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>gvhoecke</id>
+            <name>Gianni Van Hoecke</name>
+            <email>gianni@lin-k.net</email>
+            <roles>
+                <role>development</role>
+            </roles>
+            <timezone>+1</timezone>
+            <properties>
+                <private-email>gianni.vh@gmail.com</private-email>
+            </properties>
+        </developer>
+    </developers>
+
     <!-- CODE MANAGEMENT -->
     <scm>
         <tag>HEAD</tag>

@@ -44,8 +44,10 @@ public class IdentifierUtil {
 
         identifier = getContentOfWebpage( "http://instance-data/latest/meta-data/instance-id" );
 
-        if (identifier != null)
+        if (identifier != null) {
+
             return identifier;
+        }
 
         //
         // 2. Try hostname
@@ -53,8 +55,10 @@ public class IdentifierUtil {
 
         identifier = getHostname();
 
-        if (identifier != null)
+        if (identifier != null) {
+
             return identifier;
+        }
 
         //
         // 3. When the above 2 methods failed, generate a unique ID
@@ -86,8 +90,10 @@ public class IdentifierUtil {
 
             String body = new String( baos.toByteArray(), encoding );
 
-            if (body.trim().length() > 0)
+            if (body.trim().length() > 0) {
+
                 return body.trim();
+            }
         }
         catch (Exception e) {
 
@@ -104,11 +110,15 @@ public class IdentifierUtil {
 
             String hostname = InetAddress.getLocalHost().getHostAddress();
 
-            if (hostname != null)
-                hostname = hostname.replaceAll( "[^a-zA-Z0-9.]+", "" ).trim();
+            if (hostname != null) {
 
-            if (hostname != null && hostname.length() > 0)
+                hostname = hostname.replaceAll( "[^a-zA-Z0-9.]+", "" ).trim();
+            }
+
+            if (hostname != null && hostname.length() > 0) {
+
                 return hostname;
+            }
         }
         catch (Exception e) {
 

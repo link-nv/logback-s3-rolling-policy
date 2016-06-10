@@ -80,8 +80,10 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
             // If the access and secret key is not specified then try to use other providers
             if (getAwsAccessKey() == null || getAwsAccessKey().trim().isEmpty()) {
+
                 amazonS3Client = new AmazonS3Client();
             } else {
+
                 AWSCredentials cred = new BasicAWSCredentials( getAwsAccessKey(), getAwsSecretKey() );
                 amazonS3Client = new AmazonS3Client( cred );
             }

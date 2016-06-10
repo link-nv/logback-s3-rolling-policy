@@ -29,8 +29,10 @@ public class ShutdownHookUtil {
 
     public static void registerShutdownHook(@NotNull RollingPolicyShutdownListener listener, @Nullable ShutdownHookType shutdownHookType) {
 
-        if (shutdownHookType == null)
+        if (shutdownHookType == null) {
+
             shutdownHookType = ShutdownHookType.NONE;
+        }
 
         switch (shutdownHookType) {
 

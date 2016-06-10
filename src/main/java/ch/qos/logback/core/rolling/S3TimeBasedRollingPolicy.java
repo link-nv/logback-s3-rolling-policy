@@ -75,8 +75,10 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         s3Client = new AmazonS3ClientImpl( getAwsAccessKey(), getAwsSecretKey(), getS3BucketName(), getS3FolderName(), isPrefixTimestamp(),
                 isPrefixIdentifier() );
 
-        if (isPrefixIdentifier())
+        if (isPrefixIdentifier()) {
+
             addInfo( "Using identifier prefix \"" + s3Client.getIdentifier() + "\"" );
+        }
 
         //Register shutdown hook so the log gets uploaded on shutdown, if needed
         ShutdownHookUtil.registerShutdownHook( this, getShutdownHookType() );
@@ -111,8 +113,10 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
             File file = new File( getParentsRawFileProperty() );
 
-            if (file.exists() && file.canRead())
+            if (file.exists() && file.canRead()) {
+
                 lastPeriod = new Date( file.lastModified() );
+            }
         }
 
         return lastPeriod;
