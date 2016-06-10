@@ -21,13 +21,13 @@ import ch.qos.logback.core.rolling.aws.AmazonS3ClientImpl;
 import ch.qos.logback.core.rolling.shutdown.RollingPolicyShutdownListener;
 import ch.qos.logback.core.rolling.shutdown.ShutdownHookType;
 import ch.qos.logback.core.rolling.shutdown.ShutdownHookUtil;
-
 import java.io.File;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
 
 /**
  * User: gvhoecke <gianni.vanhoecke@lin-k.net>
@@ -36,17 +36,17 @@ import java.util.concurrent.TimeoutException;
  */
 public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> implements RollingPolicyShutdownListener {
 
-    private String awsAccessKey;
-    private String awsSecretKey;
-    private String s3BucketName;
-    private String s3FolderName;
+    private String           awsAccessKey;
+    private String           awsSecretKey;
+    private String           s3BucketName;
+    private String           s3FolderName;
     private ShutdownHookType shutdownHookType;
-    private boolean rolloverOnExit;
-    private boolean prefixTimestamp;
-    private boolean prefixIdentifier;
+    private boolean          rolloverOnExit;
+    private boolean          prefixTimestamp;
+    private boolean          prefixIdentifier;
 
     private AmazonS3ClientImpl s3Client;
-    private ExecutorService executor;
+    private ExecutorService    executor;
 
     private Date lastPeriod;
 
@@ -72,16 +72,10 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         lastPeriod = getLastPeriod();
 
         //Init S3 client
-        s3Client =
-                new AmazonS3ClientImpl(
-                        getAwsAccessKey(),
-                        getAwsSecretKey(),
-                        getS3BucketName(),
-                        getS3FolderName(),
-                        isPrefixTimestamp(),
-                        isPrefixIdentifier() );
+        s3Client = new AmazonS3ClientImpl( getAwsAccessKey(), getAwsSecretKey(), getS3BucketName(), getS3FolderName(), isPrefixTimestamp(),
+                isPrefixIdentifier() );
 
-        if( isPrefixIdentifier() )
+        if (isPrefixIdentifier())
             addInfo( "Using identifier prefix \"" + s3Client.getIdentifier() + "\"" );
 
         //Register shutdown hook so the log gets uploaded on shutdown, if needed
@@ -92,13 +86,10 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
     public void rollover()
             throws RolloverFailure {
 
-        if( timeBasedFileNamingAndTriggeringPolicy.getElapsedPeriodsFileName() != null ) {
+        if (timeBasedFileNamingAndTriggeringPolicy.getElapsedPeriodsFileName() != null) {
 
-            final String elapsedPeriodsFileName =
-                    String.format(
-                            "%s%s",
-                            timeBasedFileNamingAndTriggeringPolicy.getElapsedPeriodsFileName(),
-                            getFileNameSuffix() );
+            final String elapsedPeriodsFileName = String.format( "%s%s", timeBasedFileNamingAndTriggeringPolicy.getElapsedPeriodsFileName(),
+                    getFileNameSuffix() );
 
             super.rollover();
 
@@ -114,14 +105,13 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
     public Date getLastPeriod() {
 
-        Date lastPeriod = ( (TimeBasedFileNamingAndTriggeringPolicyBase<E>) timeBasedFileNamingAndTriggeringPolicy )
-                .dateInCurrentPeriod;
+        Date lastPeriod = ((TimeBasedFileNamingAndTriggeringPolicyBase<E>) timeBasedFileNamingAndTriggeringPolicy).dateInCurrentPeriod;
 
-        if( getParentsRawFileProperty() != null ) {
+        if (getParentsRawFileProperty() != null) {
 
             File file = new File( getParentsRawFileProperty() );
 
-            if( file.exists() && file.canRead() )
+            if (file.exists() && file.canRead())
                 lastPeriod = new Date( file.lastModified() );
         }
 
@@ -134,7 +124,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
     @Override
     public void doShutdown() {
 
-        if( isRolloverOnExit() ) {
+        if (isRolloverOnExit()) {
 
             //Do rolling and upload the rolled file on exit
             rollover();
@@ -149,7 +139,8 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
             executor.shutdown();
             executor.awaitTermination( 10, TimeUnit.MINUTES );
-        } catch( InterruptedException e ) {
+        }
+        catch (InterruptedException e) {
 
             executor.shutdownNow();
         }
@@ -160,15 +151,17 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
     private void waitForAsynchronousJobToStop() {
 
-        if( future != null ) {
+        if (future != null) {
 
             try {
 
                 future.get( CoreConstants.SECONDS_TO_WAIT_FOR_COMPRESSION_JOBS, TimeUnit.SECONDS );
-            } catch( TimeoutException e ) {
+            }
+            catch (TimeoutException e) {
 
                 addError( "Timeout while waiting for compression job to finish", e );
-            } catch( Exception e ) {
+            }
+            catch (Exception e) {
 
                 addError( "Unexpected exception while waiting for compression job to finish", e );
             }
@@ -179,7 +172,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
     private String getFileNameSuffix() {
 
-        switch( compressionMode ) {
+        switch (compressionMode) {
 
             case GZ:
 
@@ -199,9 +192,9 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
     class UploadQueuer implements Runnable {
 
         private final String elapsedPeriodsFileName;
-        private final Date date;
+        private final Date   date;
 
-        public UploadQueuer( final String elapsedPeriodsFileName, final Date date ) {
+        public UploadQueuer(final String elapsedPeriodsFileName, final Date date) {
 
             this.elapsedPeriodsFileName = elapsedPeriodsFileName;
             this.date = date;
@@ -214,7 +207,8 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
                 waitForAsynchronousJobToStop();
                 s3Client.uploadFileToS3Async( elapsedPeriodsFileName, date );
-            } catch( Exception ex ) {
+            }
+            catch (Exception ex) {
 
                 ex.printStackTrace();
             }
@@ -226,7 +220,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return awsAccessKey;
     }
 
-    public void setAwsAccessKey( String awsAccessKey ) {
+    public void setAwsAccessKey(String awsAccessKey) {
 
         this.awsAccessKey = awsAccessKey;
     }
@@ -236,7 +230,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return awsSecretKey;
     }
 
-    public void setAwsSecretKey( String awsSecretKey ) {
+    public void setAwsSecretKey(String awsSecretKey) {
 
         this.awsSecretKey = awsSecretKey;
     }
@@ -246,7 +240,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return s3BucketName;
     }
 
-    public void setS3BucketName( String s3BucketName ) {
+    public void setS3BucketName(String s3BucketName) {
 
         this.s3BucketName = s3BucketName;
     }
@@ -256,7 +250,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return s3FolderName;
     }
 
-    public void setS3FolderName( String s3FolderName ) {
+    public void setS3FolderName(String s3FolderName) {
 
         this.s3FolderName = s3FolderName;
     }
@@ -266,7 +260,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return rolloverOnExit;
     }
 
-    public void setRolloverOnExit( boolean rolloverOnExit ) {
+    public void setRolloverOnExit(boolean rolloverOnExit) {
 
         this.rolloverOnExit = rolloverOnExit;
     }
@@ -276,7 +270,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return shutdownHookType;
     }
 
-    public void setShutdownHookType( ShutdownHookType shutdownHookType ) {
+    public void setShutdownHookType(ShutdownHookType shutdownHookType) {
 
         this.shutdownHookType = shutdownHookType;
     }
@@ -286,7 +280,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return prefixTimestamp;
     }
 
-    public void setPrefixTimestamp( boolean prefixTimestamp ) {
+    public void setPrefixTimestamp(boolean prefixTimestamp) {
 
         this.prefixTimestamp = prefixTimestamp;
     }
@@ -296,7 +290,7 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         return prefixIdentifier;
     }
 
-    public void setPrefixIdentifier( boolean prefixIdentifier ) {
+    public void setPrefixIdentifier(boolean prefixIdentifier) {
 
         this.prefixIdentifier = prefixIdentifier;
     }

@@ -19,6 +19,7 @@ package ch.qos.logback.core.rolling.shutdown;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+
 /**
  * User: gvhoecke <gianni.vanhoecke@lin-k.net>
  * Date: 14/07/15
@@ -26,13 +27,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ShutdownHookUtil {
 
-    public static void registerShutdownHook( @NotNull RollingPolicyShutdownListener listener,
-                                             @Nullable ShutdownHookType shutdownHookType ) {
+    public static void registerShutdownHook(@NotNull RollingPolicyShutdownListener listener, @Nullable ShutdownHookType shutdownHookType) {
 
-        if( shutdownHookType == null )
+        if (shutdownHookType == null)
             shutdownHookType = ShutdownHookType.NONE;
 
-        switch( shutdownHookType ) {
+        switch (shutdownHookType) {
 
             case SERVLET_CONTEXT:
 

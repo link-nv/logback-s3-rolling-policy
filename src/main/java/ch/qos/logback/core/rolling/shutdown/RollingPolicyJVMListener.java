@@ -30,7 +30,7 @@ public class RollingPolicyJVMListener implements Runnable {
      *
      * @param listener The shutdown hook to register.
      */
-    public RollingPolicyJVMListener( final RollingPolicyShutdownListener listener ) {
+    public RollingPolicyJVMListener(final RollingPolicyShutdownListener listener) {
 
         this.listener = listener;
     }

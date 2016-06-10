@@ -17,10 +17,10 @@
 package ch.qos.logback.core.rolling.shutdown;
 
 import com.google.common.collect.Lists;
-
+import java.util.List;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
+
 
 /**
  * User: gvhoecke <gianni.vanhoecke@lin-k.net>
@@ -41,9 +41,9 @@ public class RollingPolicyContextListener implements ServletContextListener {
      *
      * @param listener The shutdown hook to register.
      */
-    public static void registerShutdownListener( final RollingPolicyShutdownListener listener ) {
+    public static void registerShutdownListener(final RollingPolicyShutdownListener listener) {
 
-        if( !listeners.contains( listener ) ) {
+        if (!listeners.contains( listener )) {
 
             listeners.add( listener );
         }
@@ -54,25 +54,25 @@ public class RollingPolicyContextListener implements ServletContextListener {
      *
      * @param listener The shutdown hook to deregister.
      */
-    public static void deregisterShutdownListener( final RollingPolicyShutdownListener listener ) {
+    public static void deregisterShutdownListener(final RollingPolicyShutdownListener listener) {
 
-        if( listeners.contains( listener ) ) {
+        if (listeners.contains( listener )) {
 
             listeners.remove( listener );
         }
     }
 
     @Override
-    public void contextInitialized( ServletContextEvent servletContextEvent ) {
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
 
         //Empty
     }
 
     @Override
-    public void contextDestroyed( ServletContextEvent servletContextEvent ) {
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
         //Upload
-        for( RollingPolicyShutdownListener listener : listeners ) {
+        for (RollingPolicyShutdownListener listener : listeners) {
 
             listener.doShutdown();
         }

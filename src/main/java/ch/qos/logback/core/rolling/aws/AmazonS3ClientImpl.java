@@ -22,7 +22,6 @@ import ch.qos.logback.core.rolling.util.IdentifierUtil;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +30,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 /**
  * User: gvhoecke <gianni.vanhoecke@lin-k.net>
@@ -49,15 +49,11 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
     private final String identifier;
 
-    private AmazonS3Client amazonS3Client;
+    private AmazonS3Client  amazonS3Client;
     private ExecutorService executor;
 
-    public AmazonS3ClientImpl( String awsAccessKey,
-                               String awsSecretKey,
-                               String s3BucketName,
-                               String s3FolderName,
-                               boolean prefixTimestamp,
-                               boolean prefixIdentifier ) {
+    public AmazonS3ClientImpl(String awsAccessKey, String awsSecretKey, String s3BucketName, String s3FolderName, boolean prefixTimestamp,
+                              boolean prefixIdentifier) {
 
         this.awsAccessKey = awsAccessKey;
         this.awsSecretKey = awsSecretKey;
@@ -70,20 +66,20 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         executor = Executors.newFixedThreadPool( 1 );
         amazonS3Client = null;
 
-        identifier = prefixIdentifier ? IdentifierUtil.getIdentifier() : null;
+        identifier = prefixIdentifier? IdentifierUtil.getIdentifier(): null;
     }
 
-    public void uploadFileToS3Async( final String filename, final Date date ) {
+    public void uploadFileToS3Async(final String filename, final Date date) {
 
         uploadFileToS3Async( filename, date, false );
     }
 
-    public void uploadFileToS3Async( final String filename, final Date date, final boolean overrideTimestampSetting ) {
+    public void uploadFileToS3Async(final String filename, final Date date, final boolean overrideTimestampSetting) {
 
-        if( amazonS3Client == null ) {
+        if (amazonS3Client == null) {
 
             // If the access and secret key is not specified then try to use other providers
-            if( getAwsAccessKey() == null || getAwsAccessKey().trim().isEmpty() ) {
+            if (getAwsAccessKey() == null || getAwsAccessKey().trim().isEmpty()) {
                 amazonS3Client = new AmazonS3Client();
             } else {
                 AWSCredentials cred = new BasicAWSCredentials( getAwsAccessKey(), getAwsSecretKey() );
@@ -94,32 +90,32 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
         final File file = new File( filename );
 
         //If file does not exist or if empty, do nothing
-        if( !file.exists() || file.length() == 0 ) {
+        if (!file.exists() || file.length() == 0) {
 
             return;
         }
 
         //Build S3 path
         final StringBuffer s3ObjectName = new StringBuffer();
-        if( getS3FolderName() != null ) {
+        if (getS3FolderName() != null) {
 
             s3ObjectName.append( format( getS3FolderName(), date ) ).append( "/" );
         }
 
         //Extra custom S3 (runtime) folder?
-        if( CustomData.extraS3Folder.get() != null ) {
+        if (CustomData.extraS3Folder.get() != null) {
 
             s3ObjectName.append( CustomData.extraS3Folder.get() ).append( "/" );
         }
 
         //Add timestamp prefix if desired
-        if( prefixTimestamp || overrideTimestampSetting ) {
+        if (prefixTimestamp || overrideTimestampSetting) {
 
             s3ObjectName.append( new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( date ) ).append( "_" );
         }
 
         //Add identifier prefix if desired
-        if( prefixIdentifier ) {
+        if (prefixIdentifier) {
 
             s3ObjectName.append( identifier ).append( "_" );
         }
@@ -135,7 +131,8 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
                 try {
 
                     amazonS3Client.putObject( getS3BucketName(), s3ObjectName.toString(), file );
-                } catch( Exception ex ) {
+                }
+                catch (Exception ex) {
 
                     ex.printStackTrace();
                 }
@@ -156,18 +153,19 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
             //Wait until finishing the upload
             executor.shutdown();
             executor.awaitTermination( 10, TimeUnit.MINUTES );
-        } catch( InterruptedException e ) {
+        }
+        catch (InterruptedException e) {
 
             executor.shutdownNow();
         }
     }
 
-    private String format( String s, Date date ) {
+    private String format(String s, Date date) {
 
         Pattern pattern = Pattern.compile( "%d\\{(.*?)\\}" );
         Matcher matcher = pattern.matcher( s );
 
-        while( matcher.find() ) {
+        while (matcher.find()) {
 
             String match = matcher.group( 1 );
 

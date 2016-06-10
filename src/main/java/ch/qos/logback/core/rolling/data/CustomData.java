@@ -18,6 +18,7 @@ package ch.qos.logback.core.rolling.data;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+
 /**
  * User: gvhoecke <gianni.vanhoecke@lin-k.net>
  * Date: 03/12/15
