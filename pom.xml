@@ -62,8 +62,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <deploy.url>scpexe://buildserver/Users/devel/maven2/repository</deploy.url>
-        <deploy.repository.url>s3://repo.linkid.be/home/maven/repository/releases</deploy.repository.url>
-        <deploy.snapshot.url>s3://repo.linkid.be/home/maven/repository/snapshots</deploy.snapshot.url>
+        <deploy.repository.url>s3://repo.linkid.be/releases</deploy.repository.url>
+        <deploy.snapshot.url>s3://repo.linkid.be/snapshots</deploy.snapshot.url>
         <repo.url>http://repo.linkid.be/releases</repo.url>
         <repo.plugin.url>http://buildserver/maven2</repo.plugin.url>
 
