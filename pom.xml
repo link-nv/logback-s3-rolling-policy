@@ -37,11 +37,11 @@
     <!-- DISTRIBUTION AND DEPLOYMENT -->
     <distributionManagement>
         <repository>
-            <id>release</id>
+            <id>repo.linkid.be</id>
             <url>${deploy.repository.url}</url>
         </repository>
         <snapshotRepository>
-            <id>release</id>
+            <id>repo.linkid.be</id>
             <url>${deploy.snapshot.url}</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
@@ -62,8 +62,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <deploy.url>scpexe://buildserver/Users/devel/maven2/repository</deploy.url>
-        <deploy.repository.url>scpexe://repo.linkid.be/home/maven/repository/releases</deploy.repository.url>
-        <deploy.snapshot.url>scpexe://repo.linkid.be/home/maven/repository/snapshots</deploy.snapshot.url>
+        <deploy.repository.url>s3://repo.linkid.be/home/maven/repository/releases</deploy.repository.url>
+        <deploy.snapshot.url>s3://repo.linkid.be/home/maven/repository/snapshots</deploy.snapshot.url>
         <repo.url>http://repo.linkid.be/releases</repo.url>
         <repo.plugin.url>http://buildserver/maven2</repo.plugin.url>
 
@@ -248,6 +248,11 @@
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh-external</artifactId>
                 <version>1.0</version>
+            </extension>
+            <extension>
+                <groupId>org.kuali.maven.wagons</groupId>
+                <artifactId>maven-s3-wagon</artifactId>
+                <version>1.2.1</version>
             </extension>
         </extensions>
 
