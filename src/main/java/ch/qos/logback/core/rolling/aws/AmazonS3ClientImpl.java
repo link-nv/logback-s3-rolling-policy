@@ -22,6 +22,9 @@ import ch.qos.logback.core.rolling.util.IdentifierUtil;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +52,7 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
     private final String identifier;
 
-    private AmazonS3Client  amazonS3Client;
+    private AmazonS3Client amazonS3Client;
     private ExecutorService executor;
 
     public AmazonS3ClientImpl(String awsAccessKey, String awsSecretKey, String s3BucketName, String s3FolderName, boolean prefixTimestamp,
@@ -132,7 +135,9 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
                 try {
 
-                    amazonS3Client.putObject( getS3BucketName(), s3ObjectName.toString(), file );
+                    amazonS3Client.putObject(
+                            new PutObjectRequest(getS3BucketName(), s3ObjectName.toString(), file)
+                                    .withCannedAcl(CannedAccessControlList.BucketOwnerFullControl));
                 }
                 catch (Exception ex) {
 
