@@ -6,26 +6,6 @@
     <artifactId>logback-s3-rolling-policy</artifactId>
     <version>GIT-SNAPSHOT</version>
 
-    <!-- ORGANIZATION & DEVELOPERS -->
-    <organization>
-        <name>linkID Inc.</name>
-        <url>https://www.linkid.be</url>
-    </organization>
-    <developers>
-        <developer>
-            <id>gvhoecke</id>
-            <name>Gianni Van Hoecke</name>
-            <email>gianni@lin-k.net</email>
-            <roles>
-                <role>development</role>
-            </roles>
-            <timezone>+1</timezone>
-            <properties>
-                <private-email>gianni.vh@gmail.com</private-email>
-            </properties>
-        </developer>
-    </developers>
-
     <!-- CODE MANAGEMENT -->
     <scm>
         <tag>HEAD</tag>
@@ -34,18 +14,6 @@
         <developerConnection>scm:git:ssh://git@github.com/link-nv/logback-s3</developerConnection>
     </scm>
 
-    <!-- DISTRIBUTION AND DEPLOYMENT -->
-    <distributionManagement>
-        <repository>
-            <id>repo.linkid.be</id>
-            <url>${deploy.repository.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>repo.linkid.be</id>
-            <url>${deploy.snapshot.url}</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
     <reporting>
         <outputDirectory>target/site</outputDirectory>
         <plugins>
@@ -60,12 +28,6 @@
     <properties>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <deploy.url>scpexe://buildserver/Users/devel/maven2/repository</deploy.url>
-        <deploy.repository.url>s3://repo.linkid.be/releases</deploy.repository.url>
-        <deploy.snapshot.url>s3://repo.linkid.be/snapshots</deploy.snapshot.url>
-        <repo.url>http://repo.linkid.be/releases</repo.url>
-        <repo.plugin.url>http://buildserver/maven2</repo.plugin.url>
 
         <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
         <maven-surefire-report-plugin.version>2.9</maven-surefire-report-plugin.version>
@@ -83,7 +45,7 @@
         <maven-source-plugin.version>2.0.4</maven-source-plugin.version>
 
         <aws-java-sdk.version>1.11.7</aws-java-sdk.version>
-        <logback.version>1.1.3</logback.version>
+        <logback.version>1.2.3</logback.version>
         <javax-servlet.version>2.4</javax-servlet.version>
         <google-guava.version>18.0</google-guava.version>
         <jetbrains-annotations.version>7.0.2</jetbrains-annotations.version>
@@ -125,15 +87,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-
-        <!-- Profile to use the buildserver maven repository -->
-        <profile>
-            <id>linkid-devel</id>
-            <properties>
-                <repo.url>http://buildserver/maven2</repo.url>
-                <repo.plugin.url>http://buildserver/maven2</repo.plugin.url>
-            </properties>
         </profile>
 
     </profiles>
@@ -324,40 +277,6 @@
         </pluginManagement>
 
     </build>
-
-    <!-- REMOTE ARTIFACT REPOSITORIES -->
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Lin.k internal repo</name>
-            <url>${repo.url}</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <!-- MAVEN PLUGIN REPOSITORIES -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <name>Lin.k internal repo</name>
-            <url>${repo.plugin.url}</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
 
