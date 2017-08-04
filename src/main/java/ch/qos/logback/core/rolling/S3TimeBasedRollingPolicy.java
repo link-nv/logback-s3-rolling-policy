@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -153,21 +154,21 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
         s3Client.doShutdown();
     }
 
-    private void waitForAsynchronousJobToStop() {
+    private void waitForAsynchronousJobToStop(Future<?> aFuture, String jobDescription) {
 
-        if (future != null) {
+        if (aFuture != null) {
 
             try {
 
-                future.get( CoreConstants.SECONDS_TO_WAIT_FOR_COMPRESSION_JOBS, TimeUnit.SECONDS );
+                aFuture.get( CoreConstants.SECONDS_TO_WAIT_FOR_COMPRESSION_JOBS, TimeUnit.SECONDS );
             }
             catch (TimeoutException e) {
 
-                addError( "Timeout while waiting for compression job to finish", e );
+                addError("Timeout while waiting for " + jobDescription + " job to finish", e);
             }
             catch (Exception e) {
 
-                addError( "Unexpected exception while waiting for compression job to finish", e );
+                addError("Unexpected exception while waiting for " + jobDescription + " job to finish", e);
             }
         }
 
@@ -209,7 +210,8 @@ public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> imple
 
             try {
 
-                waitForAsynchronousJobToStop();
+                waitForAsynchronousJobToStop(compressionFuture, "compression");
+                waitForAsynchronousJobToStop(cleanUpFuture, "clean-up");
                 s3Client.uploadFileToS3Async( elapsedPeriodsFileName, date );
             }
             catch (Exception ex) {
