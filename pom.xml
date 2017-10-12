@@ -38,7 +38,6 @@
         <maven-compiler-plugin.version>2.0.2</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.9</maven-surefire-plugin.version>
         <maven-surefire-report-plugin.version>2.5</maven-surefire-report-plugin.version>
-        <maven-deploy-plugin.version>2.7-7l</maven-deploy-plugin.version>
         <maven-assembly-plugin.version>2.2-beta-5</maven-assembly-plugin.version>
         <maven-dependency-plugin.version>2.2</maven-dependency-plugin.version>
         <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
@@ -130,7 +129,7 @@
                     <developmentVersion>GIT-SNAPSHOT</developmentVersion>
                     <localCheckout>true</localCheckout>
                     <preparationGoals>clean install</preparationGoals>
-                    <goals>deploy</goals>
+                    <goals>install</goals>
                     <updateBranchVersions>true</updateBranchVersions>
                     <updateWorkingCopyVersions>false</updateWorkingCopyVersions>
                     <branchName>${project.version}-maint</branchName>
