@@ -22,12 +22,6 @@ import ch.qos.logback.core.rolling.shutdown.ShutdownHookType;
 import ch.qos.logback.core.rolling.shutdown.ShutdownHookUtil;
 import java.util.Date;
 
-
-/**
- * User: gvhoecke <gianni.vanhoecke@lin-k.net>
- * Date: 13/07/15
- * Time: 16:53
- */
 public class S3FixedWindowRollingPolicy extends FixedWindowRollingPolicy implements RollingPolicyShutdownListener {
 
     private String           awsAccessKey;

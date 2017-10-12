@@ -25,12 +25,6 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
-/**
- * User: gvhoecke <gianni.vanhoecke@lin-k.net>
- * Date: 15/07/15
- * Time: 08:43
- */
 public class IdentifierUtil {
 
     @NotNull

@@ -21,12 +21,6 @@ import java.util.List;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-
-/**
- * User: gvhoecke <gianni.vanhoecke@lin-k.net>
- * Date: 13/07/15
- * Time: 15:36
- */
 public class RollingPolicyContextListener implements ServletContextListener {
 
     private static final List<RollingPolicyShutdownListener> listeners;

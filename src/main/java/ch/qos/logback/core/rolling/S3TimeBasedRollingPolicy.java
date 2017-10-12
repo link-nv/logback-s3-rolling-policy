@@ -29,12 +29,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-
-/**
- * User: gvhoecke <gianni.vanhoecke@lin-k.net>
- * Date: 13/07/15
- * Time: 16:53
- */
 public class S3TimeBasedRollingPolicy<E> extends TimeBasedRollingPolicy<E> implements RollingPolicyShutdownListener {
 
     private String           awsAccessKey;

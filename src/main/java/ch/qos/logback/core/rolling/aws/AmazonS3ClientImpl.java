@@ -34,12 +34,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-/**
- * User: gvhoecke <gianni.vanhoecke@lin-k.net>
- * Date: 14/07/15
- * Time: 08:28
- */
 public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
 
     private final String awsAccessKey;
