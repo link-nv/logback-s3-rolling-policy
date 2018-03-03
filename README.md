@@ -26,51 +26,6 @@ Requirements
 
 * Java 1.7+
 
-Usage
------
-
-Add the linkID repositories to your pom file:
-```xml
-<!-- REMOTE ARTIFACT REPOSITORIES -->
-<repositories>
-    <repository>
-        <id>repo.linkid.be.release</id>
-        <name>LinkID Public Repository</name>
-        <url>http://repo.linkid.be/releases</url>
-        <snapshots>
-            <enabled>false</enabled>
-            <updatePolicy>never</updatePolicy>
-        </snapshots>
-        <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-        </releases>
-    </repository>
-    <repository>
-        <id>repo.linkid.be.snapshot</id>
-        <name>LinkID Public Repository</name>
-        <url>http://repo.linkid.be/snapshots</url>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-        </snapshots>
-        <releases>
-            <enabled>false</enabled>
-            <updatePolicy>never</updatePolicy>
-        </releases>
-    </repository>
-</repositories>
-```
-
-Add the `logback-s3-rolling-policy` dependency to your pom file:
-```xml
-<dependency>
-    <groupId>ch.qos.logback</groupId>
-    <artifactId>logback-s3-rolling-policy</artifactId>
-    <version>1.5</version>
-</dependency>
-```
-
 Configuration
 -------------
 
@@ -193,7 +148,7 @@ Libraries
 
 This project uses the following libraries:
 * `com.amazonaws:aws-java-sdk:1.11.7`
-* `ch.qos.logback:logback-classic:1.1.3`
+* `ch.qos.logback:logback-classic:1.2.3`
 * `com.google.guava:guava:18.0`
 * `javax.servlet:servlet-api:2.4` (scope provided)
-* `org.jetbrains:annotations:7.0.2` (scope provided)
+* `org.jetbrains:annotations:15.0` (scope provided)
