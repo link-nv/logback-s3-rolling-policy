@@ -31,14 +31,11 @@ Configuration
 
 ### logback.xml variables
 
-Whether you implement one of any available S3 policies, the following extra variables (on top of Logback's) are mandatory:
+Whether you implement one of any available S3 policies, the following extra variables (on top of Logback's) can be used:
 
-* `awsAccessKey` Your AWS access key.
-* `awsSecretKey` Your AWS secret key.
-* `s3BucketName` The S3 bucket name to upload your log files to.
-
-There are few optional variables:
-
+* `s3BucketName` The S3 bucket name to upload your log files to (mandatory).
+* `awsAccessKey` Your AWS access key. If not provided it falls back to the AWS SDK default provider chain.
+* `awsSecretKey` Your AWS secret key. If not provided it falls back to the AWS SDK default provider chain.
 * `s3FolderName` The S3 folder name in your S3 bucket to put the log files in. This variable supports dates, just put your [pattern](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html) between `%d{}`. Example: `%d{yyyy/MM/dd}`.
 * `shutdownHookType` Defines which type of shutdown hook you want to use. This variable is mandatory when you use `rolloverOnExit`. Defaults to `NONE`. Possible values are:
   * `NONE` This will not add a shutdown hook. Please note that your most up to date log file won't be uploaded to S3!
