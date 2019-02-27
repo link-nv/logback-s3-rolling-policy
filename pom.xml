@@ -4,14 +4,17 @@
     <!-- PROJECT METADATA -->
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-s3-rolling-policy</artifactId>
-    <version>GIT-SNAPSHOT</version>
+    <version>1.8</version>
 
     <!-- CODE MANAGEMENT -->
+    <organization>
+        <name>Brightcove</name>
+    </organization>
+
     <scm>
         <tag>HEAD</tag>
-        <url>https://git@github.com/link-nv/logback-s3</url>
-        <connection>scm:git:ssh://git@github.com/link-nv/logback-s3</connection>
-        <developerConnection>scm:git:ssh://git@github.com/link-nv/logback-s3</developerConnection>
+        <url>https://git@github.com/vish91/logback-s3-rolling-policy</url>
+        <connection>scm:git:ssh://git@github.com/vish91/logback-s3-rolling-policy</connection>
     </scm>
 
     <reporting>
@@ -193,20 +196,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <!-- Maven 3.0.3 does not support scp as transport out of the box :| -->
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>1.0</version>
-            </extension>
-            <extension>
-                <groupId>org.kuali.maven.wagons</groupId>
-                <artifactId>maven-s3-wagon</artifactId>
-                <version>1.2.1</version>
-            </extension>
-        </extensions>
 
         <!-- DEFAULT PLUGIN CONFIGURATION -->
         <pluginManagement>

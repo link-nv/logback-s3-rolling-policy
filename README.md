@@ -7,7 +7,7 @@ There are 2 rolling policies which can be used:
 * `S3FixedWindowRollingPolicy`
 * `S3TimeBasedRollingPolicy`
 
-logback-s3-rolling-policy was forked from logback-s3 (https://github.com/shuwada/logback-s3) but transfered into a new project because changes were getting too big.
+logback-s3-rolling-policy was forked from [logback-s3-rolling-policy](https://github.com/kink-nv/logback-s3-rolling-policy) but transfered into a new project for some modifications and to host and manage dependency.
 
 Index
 -----
@@ -42,7 +42,7 @@ Whether you implement one of any available S3 policies, the following extra vari
   * `JVM_SHUTDOWN_HOOK` This will add a runtime shutdown hook. If you're using a webapplication, please use the `SERVLET_CONTEXT`, as the JVM shutdown hook is not really safe to use here.
   * `SERVLET_CONTEXT` This will register a shutdown hook to the context destroyed method of `RollingPolicyContextListener`. Don't forget to actually add the context listener to you `web.xml`. (see below)
 * `rolloverOnExit` Whether to rollover when your application is being shut down or not. Boolean value, defaults to `false`. If this is set to `false`, and you have defined a `shutdownHookType`, then the log file will be uploaded as is.
-* `prefixTimestamp` Whether to prefix the uploaded filename with a timestamp formatted as `yyyyMMdd_HHmmss` or not. Boolean value, defaults to `false`.
+* `prefixTimestamp` Whether to prefix the uploaded filename with a epoch timestamp or not. Boolean value, defaults to `false`.
 * `prefixIdentifier` Whether to prefix the uploaded filename with an identifier or not. Boolean value, defaults to `false`. If running on an AWS EC2 instance, the instance ID will be used. If not running on an AWS EC2 instance, the hostname address will be used. If the hostname address can't be used, a UUID will be used. 
 
 ### web.xml
@@ -149,3 +149,12 @@ This project uses the following libraries:
 * `com.google.guava:guava:18.0`
 * `javax.servlet:servlet-api:2.4` (scope provided)
 * `org.jetbrains:annotations:15.0` (scope provided)
+
+
+Known Issues
+------------
+
+This project was forked with some known limitations.  
+* Using S3TimeBased Rolling Policy with SiftAppenders does not seem to roll active file on shutdown into a zipped file
+* Using S3FixedWindow Rolling Policy uploads files to S3 but always has the index `%i` resolve to `1` when pushing to s3. It doesn't keep the incremented activeFile index in context.
+ (Workaround: Append timestamp and Identifier to bring uniqueness)

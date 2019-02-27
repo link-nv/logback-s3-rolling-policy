@@ -107,10 +107,10 @@ public class AmazonS3ClientImpl implements RollingPolicyShutdownListener {
             s3ObjectName.append( CustomData.extraS3Folder.get() ).append( "/" );
         }
 
-        //Add timestamp prefix if desired
+        //Add timestamp prefix in epoch timeformat if desired
         if (prefixTimestamp || overrideTimestampSetting) {
 
-            s3ObjectName.append( new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( date ) ).append( "_" );
+            s3ObjectName.append( String.valueOf(System.currentTimeMillis()) ).append( "_" );
         }
 
         //Add identifier prefix if desired
