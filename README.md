@@ -13,7 +13,6 @@ Index
 -----
 
 * [Requirements](#requirements) 
-* [Usage](#usage) 
 * [Configuration](#configuration) 
   * [logback.xml variables](#logbackxml-variables) 
   * [web.xml](#webxml) 
@@ -144,7 +143,8 @@ Libraries
 ---------
 
 This project uses the following libraries:
-* `com.amazonaws:aws-java-sdk:1.11.7`
+* `com.amazonaws:aws-java-sdk-s3:1.11.7`
+* `com.amazonaws:aws-java-sdk-core:1.11.7`
 * `ch.qos.logback:logback-classic:1.2.3`
 * `com.google.guava:guava:18.0`
 * `javax.servlet:servlet-api:2.4` (scope provided)

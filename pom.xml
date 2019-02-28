@@ -34,7 +34,7 @@
         <maven-javadoc-plugin.version>2.8</maven-javadoc-plugin.version>
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
 
-        <aws-java-sdk-s3.version>1.11.7</aws-java-sdk-s3.version>
+        <aws-java-sdk.version>1.11.7</aws-java-sdk.version>
         <logback.version>1.2.3</logback.version>
         <javax-servlet.version>2.4</javax-servlet.version>
         <google-guava.version>18.0</google-guava.version>
@@ -199,11 +199,6 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>${maven-release-plugin.version}</version>
                 </plugin>
-                <!--<plugin>-->
-                    <!--<groupId>org.apache.maven.plugins</groupId>-->
-                    <!--<artifactId>maven-install-plugin</artifactId>-->
-                    <!--<version>${maven-install-plugin.version}</version>-->
-                <!--</plugin>-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -249,7 +244,12 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${aws-java-sdk-s3.version}</version>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>${aws-java-sdk.version}</version>
         </dependency>
 
         <dependency>
@@ -278,9 +278,5 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <!--<prerequisites>-->
-        <!--<maven>3.0.3</maven>-->
-    <!--</prerequisites>-->
 
 </project>
