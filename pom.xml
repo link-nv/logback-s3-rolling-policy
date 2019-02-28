@@ -17,36 +17,24 @@
         <connection>scm:git:ssh://git@github.com/vish91/logback-s3-rolling-policy</connection>
     </scm>
 
-    <reporting>
-        <outputDirectory>target/site</outputDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven-javadoc-plugin.version}</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
     <properties>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
         <maven-surefire-report-plugin.version>2.9</maven-surefire-report-plugin.version>
         <maven-clean-plugin.version>2.4.1</maven-clean-plugin.version>
         <maven-resources-plugin.version>2.5</maven-resources-plugin.version>
-        <maven-release-plugin.version>2.1</maven-release-plugin.version>
+        <maven-release-plugin.version>2.3.2</maven-release-plugin.version>
         <maven-install-plugin.version>2.3.1</maven-install-plugin.version>
-        <maven-compiler-plugin.version>2.0.2</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.9</maven-surefire-plugin.version>
         <maven-surefire-report-plugin.version>2.5</maven-surefire-report-plugin.version>
-        <maven-assembly-plugin.version>2.2-beta-5</maven-assembly-plugin.version>
-        <maven-dependency-plugin.version>2.2</maven-dependency-plugin.version>
-        <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
-        <maven-source-plugin.version>2.0.4</maven-source-plugin.version>
+        <maven-assembly-plugin.version>2.2.1</maven-assembly-plugin.version>
+        <maven-dependency-plugin.version>2.3</maven-dependency-plugin.version>
+        <maven-javadoc-plugin.version>2.8</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
 
-        <aws-java-sdk.version>1.11.7</aws-java-sdk.version>
+        <aws-java-sdk-s3.version>1.11.7</aws-java-sdk-s3.version>
         <logback.version>1.2.3</logback.version>
         <javax-servlet.version>2.4</javax-servlet.version>
         <google-guava.version>18.0</google-guava.version>
@@ -94,7 +82,6 @@
     </profiles>
 
     <build>
-
         <!-- Suppress MavenModelInspection -->
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
@@ -117,7 +104,6 @@
             </testResource>
         </testResources>
         <!--suppress MavenModelInspection-->
-        <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
         <directory>target</directory>
         <outputDirectory>target/classes</outputDirectory>
         <testOutputDirectory>target/test-classes</testOutputDirectory>
@@ -165,14 +151,11 @@
                     <fork>true</fork>
                     <source>1.7</source>
                     <target>1.7</target>
-                    <meminitial>32m</meminitial>
-                    <maxmem>128m</maxmem>
                     <encoding>UTF-8</encoding>
                     <optimize>true</optimize>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
-                <inherited>true</inherited>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -182,6 +165,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
             </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
@@ -215,11 +199,11 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>${maven-release-plugin.version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>${maven-install-plugin.version}</version>
-                </plugin>
+                <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-install-plugin</artifactId>-->
+                    <!--<version>${maven-install-plugin.version}</version>-->
+                <!--</plugin>-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -262,11 +246,10 @@
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
-            <version>${aws-java-sdk.version}</version>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws-java-sdk-s3.version}</version>
         </dependency>
 
         <dependency>
@@ -294,11 +277,10 @@
             <version>${jetbrains-annotations.version}</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
-    <prerequisites>
-        <maven>3.0.3</maven>
-    </prerequisites>
+    <!--<prerequisites>-->
+        <!--<maven>3.0.3</maven>-->
+    <!--</prerequisites>-->
 
 </project>
