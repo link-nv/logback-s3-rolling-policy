@@ -43,10 +43,10 @@
         <maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
         <maven-source-plugin.version>2.0.4</maven-source-plugin.version>
 
-        <aws-java-sdk.version>1.11.293</aws-java-sdk.version>
-        <logback.version>1.2.3</logback.version>
+        <aws-java-sdk.version>1.11.1034</aws-java-sdk.version>
+        <logback.version>1.2.7</logback.version>
         <javax-servlet.version>2.4</javax-servlet.version>
-        <google-guava.version>18.0</google-guava.version>
+        <google-guava.version>30.0-android</google-guava.version>
         <jetbrains-annotations.version>15.0</jetbrains-annotations.version>
 
     </properties>
