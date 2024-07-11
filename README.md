@@ -13,7 +13,6 @@ Index
 -----
 
 * [Requirements](#requirements) 
-* [Usage](#usage) 
 * [Configuration](#configuration) 
   * [logback.xml variables](#logbackxml-variables) 
   * [web.xml](#webxml) 
